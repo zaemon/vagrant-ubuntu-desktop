@@ -1,0 +1,14 @@
+- name: update server
+  apt: update_cache=yes
+
+- name: install build tools
+  apt: pkg={{ item }}
+  with_items:
+    - build-essential
+    - module-assistant
+    - aptitude
+    - net-tools
+    - python-pip
+
+- name: upgrade server
+  apt: upgrade=dist

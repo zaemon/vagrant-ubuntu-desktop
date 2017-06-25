@@ -1,0 +1,62 @@
+- name: Check kernel version.
+  fail: msg="Kernel {{ ansible_kernel }} is not supported."
+  when: "ansible_kernel | version_compare('3.10', '<')"
+
+- name: define lsb_release -cs
+  shell: lsb_release -cs
+  ignore_errors: True
+  register: lsb_release
+
+- name: install packages for docker
+  apt: pkg={{ item }} update_cache=yes
+  with_items:
+    - linux-image-extra-virtual
+    - linux-image-extra-{{ ansible_kernel }}
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: add gpg keys
+  apt_key:
+    url: "https://download.docker.com/linux/ubuntu/gpg"
+- name: add repository
+  apt_repository:
+    repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable
+
+- apt: update_cache=yes
+- name: install docker-ce
+  apt: pkg={{ item }} update_cache=yes
+  with_items:
+    - docker-ce
+
+- name: uname -s
+  shell: uname -s
+  ignore_errors: True
+  register: uname_s
+
+- name: uname -m
+  shell: uname -m
+  ignore_errors: True
+  register: uname_m
+
+- name: Install docker-compose
+  get_url:
+    url: "https://github.com/docker/compose/releases/download/1.14.0/docker-compose-{{ uname_s.stdout }}-{{ uname_m.stdout }}"
+    dest: /usr/bin/docker-compose
+
+- name: change mod +x docker-compose
+  file:
+    path: /usr/bin/docker-compose
+    owner: root
+    group: root
+    mode: 0755
+
+- group:
+    name: docker
+- user:
+    name: vagrant
+    group: docker
+- service:
+    name: docker
+    state: restarted

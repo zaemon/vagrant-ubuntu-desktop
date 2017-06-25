@@ -1,0 +1,10 @@
+- name: update server
+  apt: update_cache=yes
+
+- name: install desktop package
+  apt: pkg={{ item }}
+  with_items:
+    - ubuntu-desktop
+
+- name: upgrade server
+  apt: upgrade=dist

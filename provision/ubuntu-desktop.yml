@@ -1,0 +1,11 @@
+---
+- hosts: ubuntu-desktop
+  connection: local
+  remote_user: vagrant
+  become: yes
+  roles:
+    - apt-systemupdate
+    - desktop
+    - apt-japanese
+    - docker
+    - apt-other-packages
