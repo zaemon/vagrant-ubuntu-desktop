@@ -71,7 +71,7 @@ $ sudo mount.cifs //server/shareddir /mountpoint -o user=userofserver,uid=vagran
 /etc/fstabに以下のように書くことで起動時マウントが可能.  
 (マウントポイントのディレクトリーはあらかじめ作成しておくこと)
 ```
-//server/shareddir /mountpoint cifs user=userofserver,password=serverpassworduid=vagrant,gid=docker 0 0
+//server/shareddir /mountpoint cifs user=userofserver,password=serverpassword,uid=vagrant,gid=docker 0 0
 ```
 書いたfstabを使ってその場でマウントするには以下のコマンドを実行する。
 ```
