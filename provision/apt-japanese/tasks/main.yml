@@ -16,6 +16,7 @@
   with_items:
     - ubuntu-defaults-ja
     - language-pack-ja
+    - compizconfig-settings-manager
 
 - name: upgrade server
   apt: upgrade=dist
